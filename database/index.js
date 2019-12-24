@@ -3,53 +3,50 @@ mongoose.connect('mongodb://localhost/fetcher');
 
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
-  login: String,
-  avatar_url: String,
-  html_url: String,
-  reposs_url: String,
-  gists_url: String,
-
-  id: Number,
-  name: { type: String, unique: true },
+  name: String,
   full_name: String,
-  html_url: String,
-  description: String,
-  url: String,
+  owner:{
+    login:String,
+    repos_url:String
+  },
   created_at: String,
-  updated_at: String,
-  stargazers_count: Number,
-  watchers_count: Number,
-  languages_url: String
+  updated_at: String
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (repo) => {
+let save = (repos) => {
   // TODO: Your code here
   // This function should save a repo or repos to
-  // the MongoDB
+ //var repos = JSON.parse(repo);
+  // repos.forEach(elem => {
+    // var repo = new Repo(repos)
+    Repo.create(repos).then(res => {
+      // console.log(res);
+      // console.log(res)
+      console.log("saved! database");
 
-  let repos = JSON.parse(repo.body)
-  repos.forEach((elements) => {
-    Repo.create(elem, err => {
-      if(err) {
-        console.log(err)
-      }else{
-        console.log('SAVED!!')
-      }
+    }).catch(err => {
+
+      console.log('err database');
     })
-  })
-}
+
+  // });
+  // the MongoDB
+};
 
 let findRepos = (callback) => {
-  Repo.find().sort('id').limit(25).exec((err, repos) => {
+  Repo.find().sort('created_at-').limit(25).exec((err, repos) => {
     if(err) {
       callback(err, null)
     }else {
-      callback(null, data)
+      // console.log(repos)
+      callback(null, repos)
     }
   })
 }
 
-module.exports.save = save;
-module.exports.findRepos = findRepos
+module.exports = {
+  save,
+  findRepos
+};

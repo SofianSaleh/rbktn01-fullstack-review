@@ -15,11 +15,13 @@ app.post('/repos', function (req, res) {
   // save the repo information in the database
 
   var username = req.body.username;
-  github.getReposUsername(username, (err, data) => {
+  github.getReposByUsername(username, (err, data) => {
     if(err){
-      console.log(err)
+      console.log('err post in server')
     }else {
+      // console.log(data)
       save(data)
+
     }
   })
 });
@@ -29,7 +31,7 @@ app.get('/repos', function (req, res) {
   // This route should send back the top 25 repos
   findRepos((err, repo) => {
     if(err) {
-      console.log(err)
+      console.log('err index server')
     }else{
       res.send(repo)
     }

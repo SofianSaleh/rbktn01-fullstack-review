@@ -15,6 +15,7 @@ class App extends React.Component {
 
   search (term) {
     console.log(`${term} was searched`);
+    // console.log(this.state.repos[0])
     // TODO
     $.ajax({
       url:"/repos",
@@ -22,7 +23,8 @@ class App extends React.Component {
       dataType: "application/json",
       data: { username: term },
       success: data => {
-        console.log("It fucking worked")
+        console.log("It worked")
+        this.setState({ repos: data })
       },
       error : () => {
         console.log('ahh shit here we go again')
@@ -34,8 +36,8 @@ class App extends React.Component {
     $.ajax({
       url: "/repos",
       method: "GET",
-      success: repos => {
-        this.setState({ repos })
+      success: data => {
+        this.setState({ repos: data })
       }
     });
   }
@@ -44,6 +46,7 @@ class App extends React.Component {
     return (
     <div>
       <h1>Github Fetcher</h1>
+    <h1></h1>
       <RepoList repos={this.state.repos}/>
       <Search onSearch={this.search.bind(this)}/>
     </div>

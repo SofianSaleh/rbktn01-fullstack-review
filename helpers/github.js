@@ -1,5 +1,7 @@
 const request = require('request');
 const config = require('../config.js');
+const axios = require('axios')
+const fetch = require('fetch')
 
 let getReposByUsername = (username, callback) => {
   // TODO - Use the request module to request repos for a specific
@@ -14,14 +16,17 @@ let getReposByUsername = (username, callback) => {
       'Authorization': `token ${config.TOKEN}`
     }
   };
-  request(options, (err, data) => {
-    console.log(data)
+  request.get(options, (err, data, body) => {
+    //console.log("data",data.connection._tlsOptions.session );
     if(err) {
       callback(err, null)
     }else{
+      console.log(data)
       callback(null, data)
     }
   })
+
+
 }
 
 module.exports.getReposByUsername = getReposByUsername;
